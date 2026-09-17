@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#27ae60">
+    <title>متجر نهوض للملابس</title>
+
+    <!-- وسوم معاينة الواتساب -->
+    <meta property="og:title" content="متجر نهوض - أحدث أطقم الملابس">
+    <meta property="og:description" content="تصفح أحدث الأطقم الأنيقة واطلب مباشرة عبر الواتساب">
+    <meta property="og:image" content="https://esmatstore.netlify.app/logo.png">
+    <meta property="og:url" content="https://esmatstore.netlify.app">
+    <meta property="og:type" content="website">
+
+    <!-- أيقونة التبويب -->
+    <link rel="icon" href="logo.png" sizes="32x32 48x48 192x192" type="image/png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="manifest" herf="manifest.json">
+
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --text-muted: #6c757d;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --color-sec-bg: #f1f3f5;
+            --color-primary: #007bff;
+            --color-success: #28a745;
+            --color-danger: #dc3545;
+            --color-share: #17a2b8;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+            --color-sec-bg: #2a2a2a;
+        }
+
+        /* انتقال انسيابي ناعم جداً لكل عناصر المتجر عند التبديل */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            direction: rtl;
+            padding-bottom: 40px;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 25px 20px 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        header img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .theme-toggle-btn {
+            position: absolute;
+            left: 15px;
+            top: 20px;
+            background: var(--color-sec-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .theme-toggle-btn:active {
+            transform: scale(0.9) rotate(15deg);
+        }
+
+        nav {
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: bold;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn.active {
+            color: var(--color-primary);
+            background-color: var(--color-sec-bg);
+        }
+
+        .badge {
+            background-color: var(--color-danger);
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .price-tag {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--color-success);
+        }
+
+        .stock-badge {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: var(--color-sec-bg);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .product-options-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .option-box-color {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .option-box-qty {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .product-options-row label {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        .product-options-row select, 
+        .product-options-row input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .product-options-row select {
+            text-align: right;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-add { background-color: var(--color-success); color: white; }
+        .btn-share { background-color: var(--color-share); color: white; }
+        .btn-primary { background-color: var(--color-primary); color: white; }
+        .btn-whatsapp { background-color: #25d366; color: white; font-size: 16px; }
+        .btn-danger { background-color: var(--color-danger); color: white; padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; }
+
+        .box-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .cart-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-item-details {
+            text-align: right;
+        }
+
+        .cart-item-price-action {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-total-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 12px 15px;
+            background-color: var(--color-sec-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        .required-star {
+            color: var(--color-danger);
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 260px;
+            background-color: #27ae60;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px 20px;
+            position: fixed;
+            z-index: 1000;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.4s ease, bottom 0.4s ease, visibility 0.4s, background-color 0.3s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div id="toast">تمت العملية بنجاح!</div>
+
+    <header>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">🌙 الوضع الليلي</button>
+        <img src="logo.png" alt="شعار المتجر">
+        <!-- تم إضافة خاصية الاستماع للضغط الثلاثي السري هنا -->
+        <h1 id="secret-title" style="cursor: pointer; user-select: none;" title="متجر نهوض">نهوض</h1>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" id="btn-home" onclick="switchTab('home')">🏠 الرئيسية</button>
+        <button class="nav-btn" id="btn-cart" onclick="switchTab('cart')">🛒 السلة <span class="badge" id="cart-count">0</span></button>
+        <button class="nav-btn" id="btn-checkout" onclick="switchTab('checkout')">📍 العنوان والطلب</button>
+    </nav>
+
+    <div class="container">
+        <!-- 1. الصفحة الرئيسية -->
+        <div id="page-home" class="page-section active">
+            <h2 style="margin-bottom: 15px; text-align: right;">أحدث الأطقم المتوفرة</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img id="product-img-1" src="product1-blue.jpg" onerror="this.src='logo.png'">
+                    <h3>قطعة رقم 1</h3>
+                    <div class="price-tag">45 شيكل</div>
+                    
+                    <div>
+                        <span class="stock-badge">المتوفر: <span id="stock-count-1">5</span> قطع</span>
+                    </div>
+
+                    <div class="product-options-row">
+                        <div class="option-box-color">
+                            <label>اختر اللون:</label>
+                            <select id="product-color-1" onchange="onProductColorChange(1)">
+                                <option value="أزرق" data-img="product1-blue.jpg" data-stock="5">🔵 أزرق</option>
+                                <option value="أحمر" data-img="product1-red.jpg" data-stock="3">🔴 أحمر</option>
+                            </select>
+                        </div>
+                        <div class="option-box-qty">
+                            <label>الكمية:</label>
+                            <input type="number" id="product-qty-1" value="1" min="1" max="10">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-add" id="btn-add-1" onclick="addToCartWithOptions(1, 'قطعة رقم 1', 45, 'product-color-1', 'product-qty-1')">➕ إضافة للسلة</button>
+                    <button class="btn btn-share" onclick="shareProduct('قطعة رقم 1', 45)">🔗 مشاركة القطعة</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. صفحة السلة -->
+        <div id="page-cart" class="page-section">
+            <div class="box-section">
+                <div class="cart-header-row">
+                    <h2>محتويات السلة</h2>
+                    <button class="btn btn-danger" id="btn-clear-cart" onclick="clearCart()" style="display:none; width: auto; font-size: 12px; padding: 6px 12px;">🗑️ تفريغ السلة</button>
+                </div>
+                <div id="cart-items-container">
+                    <p style="color: var(--text-muted);">السلة فارغة حالياً.</p>
+                </div>
+
+                <div class="cart-total-box" id="cart-total-area" style="display:none;">
+                    <span>إجمالي المشتريات:</span>
+                    <span id="cart-total-price" style="color: var(--color-success);">0 شيكل</span>
+                </div>
+                <br>
+                <button class="btn btn-primary" onclick="switchTab('checkout')" id="btn-to-address" style="display:none; font-size: 16px;">متابعة وإضافة العنوان 📍</button>
+            </div>
+        </div>
+
+        <!-- 3. صفحة العنوان والطلب -->
+        <div id="page-checkout" class="page-section">
+            <div class="box-section">
+                <h2>تفاصيل العنوان والشحن</h2>
+                <br>
+                <form id="order-form" onsubmit="sendToWhatsApp(event)">
+                    <div class="form-group">
+                        <label>الاسم الكامل <span class="required-star">*</span></label>
+                        <input type="text" id="cust-name" placeholder="أدخل اسمك الكامل" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>رقم التواصل <span class="required-star">*</span></label>
+                        <input type="tel" id="cust-phone" placeholder="أدخل رقم التواصل" style="text-align: right; direction: rtl;" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>منطقة التوصيل <span class="required-star">*</span></label>
+                        <select id="shipping-zone" onchange="calculateGrandTotal()" required>
+                            <option value="" data-price="0">-- اختر المنطقة --</option>
+                            <option value="شمال غزة" data-price="25">شمال غزة (توصيل: 25 شيكل)</option>
+                            <option value="غزة" data-price="20">غزة (توصيل: 20 شيكل)</option>
+                            <option value="النصيرات" data-price="15">النصيرات (توصيل: 15 شيكل)</option>
+                            <option value="الزوايدة" data-price="15">الزوايدة (توصيل: 15 شيكل)</option>
+                            <option value="البريج" data-price="15">البريج (توصيل: 15 شيكل)</option>
+                            <option value="دير البلح" data-price="15">دير البلح (توصيل: 15 شيكل)</option>
+                            <option value="خانيونس" data-price="20">خانيونس (توصيل: 20 شيكل)</option>
+                            <option value="رفح" data-price="30">رفح (توصيل: 30 شيكل)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>تفاصيل العنوان (الشارع / الحي / أقرب معلم) <span class="required-star">*</span></label>
+                        <textarea id="cust-address-details" rows="3" placeholder="مثال: دير البلح - شارع عكيلة - بالقرب من مسجد بلال" required></textarea>
+                    </div>
+
+                    <div style="background: var(--color-sec-bg); padding: 15px; border-radius: 8px; text-align: right; margin: 15px 0; border: 1px solid var(--border-color);">
+                        <p><b>مجموع القطع:</b> <span id="summary-items-price">0</span> شيكل</p>
+                        <p><b>تكلفة التوصيل:</b> <span id="summary-shipping-price">0</span> شيكل</p>
+                        <hr style="margin: 8px 0; border-color: var(--border-color);">
+                        <p style="font-size: 18px; color: var(--color-success);"><b>الإجمالي النهائي: <span id="summary-grand-total">0</span> شيكل</b></p>
+                    </div>
+
+                    <button type="submit" class="btn btn-whatsapp">📲 إرسال الطلب عبر الواتساب</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<script>
+        // 🛑 استبدل القيم هنا بمفاتيحك من JSONBin 🛑
+const JSONBIN_ID = "6aac1670ac6210605ad91d0a";
+const JSONBIN_KEY = "$2a$10$oQEUOKNBFpYXUtYFXCS3Vu8YsK8OjtCn1v1zoAcW8HniwAnhfpCO2";
+
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
+
+let cart = [];
+const myWhatsAppNumber = "972597145813";
+
+// الهيكل الابتدائي للمخزون
+let productsStock = {
+    1: {
+        "أزرق": 5,
+        "أحمر": 3
+    }
+};
+
+// 1. جلب المخزون الحقيقي من السحابة فور فتح الصفحة أو التحديث
+async function fetchStockFromCloud() {
+    try {
+        let response = await fetch(JSONBIN_URL + "/latest", {
+            headers: { "X-Master-Key": JSONBIN_KEY }
+        });
+        let data = await response.json();
+        if (data.record) {
+            productsStock = data.record;
+        }
+        updateStockDisplay(1);
+    } catch (e) {
+        console.error("خطأ في جلب البيانات من السحابة:", e);
+    }
+}
+
+// تشغيل جلب البيانات فوراً عند فتح المتجر
+fetchStockFromCloud();
+
+// 2. دالة الخصم من السحابة فور الضغط على زر الواتساب
+async function updateStockInCloud() {
+    cart.forEach(item => {
+        if (productsStock[item.id] && productsStock[item.id][item.color] !== undefined) {
+            // دعم الهيكلين (سواء رقم مباشر أو كائن يحتوي على stock)
+            if (typeof productsStock[item.id][item.color] === 'object') {
+                productsStock[item.id][item.color].stock = Math.max(0, productsStock[item.id][item.color].stock - item.qty);
+            } else {
+                productsStock[item.id][item.color] = Math.max(0, productsStock[item.id][item.color] - item.qty);
+            }
+        }
+    });
+
+    try {
+        await fetch(JSONBIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_KEY
+            },
+            body: JSON.stringify(productsStock)
+        });
+    } catch (e) {
+        console.error("خطأ في تحديث السحابة:", e);
+    }
+}
+
+// نظام عداد الزيارات السري بالخلفية
+(function countVisitor() {
+    let visits = localStorage.getItem('store_visits_count');
+    if (!visits) {
+        visits = 1;
+    } else {
+        visits = parseInt(visits) + 1;
+    }
+    localStorage.setItem('store_visits_count', visits);
+})();
+
+// إعداد نظام الضغط الثلاثي السري على كلمة "نهوض"
+let clickCounter = 0;
+let clickTimer = null;
+
+document.getElementById('secret-title').addEventListener('click', function() {
+    clickCounter++;
+    
+    if (clickTimer) clearTimeout(clickTimer);
+
+    if (clickCounter === 3) {
+        clickCounter = 0;
+        let password = prompt("أدخل الرقم السري لإظهار الإحصائيات:");
+        if (password === "2462021") {
+            let totalVisits = localStorage.getItem('store_visits_count') || 1;
+            showToast(`📊 عدد زيارات المتجر الكلي: ${totalVisits} زيارة`, 'success');
+        } else if (password !== null) {
+            showToast('الرقم السري غير صحيح!', 'danger');
+        }
+    } else {
+        clickTimer = setTimeout(() => {
+            clickCounter = 0;
+        }, 600);
+    }
+});
+
+function toggleTheme() {
+    let currentTheme = document.documentElement.getAttribute('data-theme');
+    let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+}
+
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('preferred-theme', theme);
+
+    let btn = document.getElementById('theme-btn');
+    if (theme === 'dark') {
+        btn.innerHTML = '☀️ الوضع النهاري';
+    } else {
+        btn.innerHTML = '🌙 الوضع الليلي';
+    }
+}
+
+(function initTheme() {
+    let savedTheme = localStorage.getItem('preferred-theme') || 'light';
+    setTheme(savedTheme);
+    updateStockDisplay(1);
+})();
+
+function showToast(message, type = 'success') {
+    let toast = document.getElementById("toast");
+    toast.innerText = message;
+    
+    if (type === 'success') {
+        toast.style.backgroundColor = '#27ae60';
+    } else if (type === 'danger') {
+        toast.style.backgroundColor = '#e74c3c';
+    } else {
+        toast.style.backgroundColor = '#333';
+    }
+
+    toast.classList.add("show");
+    setTimeout(function() {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+    document.getElementById('page-' + tabName).classList.add('active');
+    document.getElementById('btn-' + tabName).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function onProductColorChange(id) {
+    let select = document.getElementById('product-color-' + id);
+    let selectedOption = select.options[select.selectedIndex];
+    
+    let imgFilename = selectedOption.getAttribute('data-img');
+    document.getElementById('product-img-' + id).src = imgFilename;
+
+    updateStockDisplay(id);
+}
+
+function updateStockDisplay(id) {
+    if (!productsStock[id]) return;
+
+    let select = document.getElementById('product-color-' + id);
+    let selectedColor = select.value;
+    
+    let stockVal = productsStock[id][selectedColor];
+    let currentStock = (typeof stockVal === 'object') ? stockVal.stock : (stockVal ?? 0);
+
+    document.getElementById(`stock-count-${id}`).innerText = currentStock;
+
+    let addBtn = document.getElementById(`btn-add-${id}`);
+    if (currentStock === 0) {
+        addBtn.disabled = true;
+        addBtn.innerText = "❌ نفذت الكمية";
+        addBtn.style.backgroundColor = "#6c757d";
+    } else {
+        addBtn.disabled = false;
+        addBtn.innerText = "➕ إضافة للسلة";
+        addBtn.style.backgroundColor = "var(--color-success)";
+    }
+}
+
+function shareProduct(productName, price) {
+    let productUrl = window.location.href;
+    let shareData = {
+        title: 'متجر نهوض',
+        text: `👕 ${productName}\n💰 السعر: ${price} شيكل\nاطلبه الآن من متجر نهوض:`,
+        url: productUrl
+    };
+
+    if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+    } else {
+        let fallbackText = `${shareData.text} ${shareData.url}`;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(fallbackText).then(() => {
+                showToast('تم نسخ تفاصيل ورابط القطعة بنجاح! 📋', 'success');
+            });
+        } else {
+            showToast('تعذر النسخ تلقائياً', 'danger');
+        }
+    }
+}
+
+function addToCartWithOptions(productId, name, price, colorSelectId, qtyInputId) {
+    let colorSelect = document.getElementById(colorSelectId);
+    let selectedColor = colorSelect.value;
+    
+    let qtyInput = document.getElementById(qtyInputId);
+    let quantityToAdd = parseInt(qtyInput.value) || 1;
+
+    let stockVal = productsStock[productId]?.[selectedColor];
+    let currentStock = (typeof stockVal === 'object') ? stockVal.stock : (stockVal ?? 0);
+
+    if (quantityToAdd > currentStock) {
+        showToast(`عذراً، المتوفر من لون ${selectedColor} هو ${currentStock} قطع فقط!`, 'danger');
+        return;
+    }
+
+    let uniqueName = `${name} (اللون: ${selectedColor})`;
+
+    let existingItem = cart.find(item => item.name === uniqueName);
+    let currentInCart = existingItem ? existingItem.qty : 0;
+
+    if ((currentInCart + quantityToAdd) > currentStock) {
+        showToast(`لا يمكنك إضافة أكثر من المخزون المتوفر (${currentStock} قطع).`, 'danger');
+        return;
+    }
+
+    if (existingItem) {
+        existingItem.qty += quantityToAdd;
+    } else {
+        cart.push({ id: productId, color: selectedColor, name: uniqueName, price: price, qty: quantityToAdd });
+    }
+
+    updateCartUI();
+    showToast(`تمت إضافة ${quantityToAdd} قطع للسلة! 🛒`, 'success');
+    
+    qtyInput.value = 1;
+}
+
+function removeFromCart(index) {
+    let removedItemName = cart[index].name;
+    if (cart[index].qty > 1) {
+        cart[index].qty -= 1;
+    } else {
+        cart.splice(index, 1);
+    }
+    updateCartUI();
+    showToast(`تم حذف قطعة من (${removedItemName}) 🗑️`, 'danger');
+}
+
+function clearCart() {
+    if (confirm('هل أنت متأكد من تفريغ السلة بالكامل؟')) {
+        cart = [];
+        updateCartUI();
+        showToast('تم تفريغ السلة بنجاح 🗑️', 'danger');
+    }
+}
+
+function updateCartUI() {
+    let totalCount = 0;
+    let itemsPrice = 0;
+    let cartHTML = '';
+
+    cart.forEach((item, index) => {
+        totalCount += item.qty;
+        let itemTotal = item.price * item.qty;
+        itemsPrice += itemTotal;
+
+        cartHTML += `
+            <div class="cart-item">
+                <div class="cart-item-details">
+                    <b>${item.qty} × ${item.name}</b><br>
+                    <small style="color: var(--text-muted);">السعر للقطعة: ${item.price} شيكل</small>
+                </div>
+                <div class="cart-item-price-action">
+                    <b style="color: var(--color-success);">${itemTotal} شيكل</b>
+                    <button class="btn btn-danger" onclick="removeFromCart(${index})" title="حذف قطعة واحدة">🗑️</button>
+                </div>
+            </div>
+        `;
+    });
+
+    document.getElementById('cart-count').innerText = totalCount;
+    
+    let container = document.getElementById('cart-items-container');
+    let totalArea = document.getElementById('cart-total-area');
+    let btnToAddress = document.getElementById('btn-to-address');
+    let btnClearCart = document.getElementById('btn-clear-cart');
+
+    if (cart.length > 0) {
+        container.innerHTML = cartHTML;
+        document.getElementById('cart-total-price').innerText = itemsPrice + ' شيكل';
+        totalArea.style.display = 'flex';
+        btnToAddress.style.display = 'block';
+        btnClearCart.style.display = 'block';
+    } else {
+        container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 10px;">السلة فارغة حالياً.</p>';
+        totalArea.style.display = 'none';
+        btnToAddress.style.display = 'none';
+        btnClearCart.style.display = 'none';
+    }
+
+    calculateGrandTotal();
+}
+
+function calculateGrandTotal() {
+    let itemsPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    
+    let zoneSelect = document.getElementById('shipping-zone');
+    let selectedZone = zoneSelect.options[zoneSelect.selectedIndex];
+    let shippingPrice = parseInt(selectedZone.getAttribute('data-price') || 0);
+
+    document.getElementById('summary-items-price').innerText = itemsPrice;
+    document.getElementById('summary-shipping-price').innerText = shippingPrice;
+    document.getElementById('summary-grand-total').innerText = itemsPrice + shippingPrice;
+}
+
+async function sendToWhatsApp(e) {
+    e.preventDefault();
+
+    if (cart.length === 0) {
+        showToast('السلة فارغة! اختر بعض الملابس أولاً.', 'danger');
+        switchTab('home');
+        return;
+    }
+
+    let name = document.getElementById('cust-name').value.trim();
+    let phoneInput = document.getElementById('cust-phone').value.trim();
+    let zoneSelect = document.getElementById('shipping-zone');
+    let zoneName = zoneSelect.value;
+    let shippingPrice = parseInt(zoneSelect.options[zoneSelect.selectedIndex].getAttribute('data-price') || 0);
+    let addressDetails = document.getElementById('cust-address-details').value.trim();
+
+    if (!name || !phoneInput || !zoneName || !addressDetails) {
+        showToast('يرجى تعبئة كافة تفاصيل العنوان والطلب الإجبارية!', 'danger');
+        return;
+    }
+
+    // الخصم المباشر والتحديث المباشر في السحابة
+    showToast('جاري تسجيل الطلب وتحديث المخزون...', 'success');
+    await updateStockInCloud();
+    updateStockDisplay(1);
+
+    let itemsPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    let grandTotal = itemsPrice + shippingPrice;
+
+    let secretBadge = "🔒 [طلب معتمد رسمي]";
+
+    let message = `*طلب جديد من متجر نهوض* 👕\n\n`;
+    message += `*الاسم:* ${name}\n`;
+    message += `*رقم التواصل:* ${phoneInput}\n`;
+    message += `*المنطقة:* ${zoneName}\n`;
+    message += `*تفاصيل العنوان:* ${addressDetails}\n\n`;
+    
+    message += `*القطع المطلوبة:*\n`;
+    cart.forEach((item, i) => {
+        message += `${i+1}. ${item.name} | العدد: ${item.qty} | السعر: ${item.price * item.qty} شيكل\n`;
+    });
+
+    message += `\n*مجموع القطع:* ${itemsPrice} شيكل\n`;
+    message += `*تكلفة الشحن:* ${shippingPrice} شيكل\n`;
+    message += `*الإجمالي النهائي:* ${grandTotal} شيكل\n\n`;
+    
+    message += `${secretBadge}`;
+
+    cart = [];
+    updateCartUI();
+
+    let whatsappURL = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(message)}`;
+    window.location.href = whatsappURL;
+}
+    </script>
+</body>
+</html>
