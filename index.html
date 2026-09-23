@@ -9,14 +9,13 @@
     <!-- وسوم معاينة الواتساب -->
     <meta property="og:title" content="متجر نهوض - أحدث أطقم الملابس">
     <meta property="og:description" content="تصفح أحدث الأطقم الأنيقة واطلب مباشرة عبر الواتساب">
-    <meta property="og:image" content="https://esmatstore.netlify.app/logo.png">
-    <meta property="og:url" content="https://esmatstore.netlify.app">
+    <meta property="og:image" content="logo.png">
     <meta property="og:type" content="website">
 
-    <!-- أيقونة التبويب -->
+    <!-- أيقونة التبويب ورابط الـ Manifest -->
     <link rel="icon" href="logo.png" sizes="32x32 48x48 192x192" type="image/png">
     <link rel="apple-touch-icon" href="logo.png">
-    <link rel="manifest" herf="manifest.json">
+    <link rel="manifest" href="manifest.json">
 
     <style>
         :root {
@@ -30,6 +29,7 @@
             --color-success: #28a745;
             --color-danger: #dc3545;
             --color-share: #17a2b8;
+            --color-whatsapp: #25d366;
         }
 
         [data-theme="dark"] {
@@ -41,7 +41,6 @@
             --color-sec-bg: #2a2a2a;
         }
 
-        /* انتقال انسيابي ناعم جداً لكل عناصر المتجر عند التبديل */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -83,6 +82,40 @@
             font-size: 26px;
             font-weight: bold;
         }
+
+        .quick-actions-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: none;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-quick-whatsapp { background-color: var(--color-whatsapp); color: white; }
+        .btn-quick-share { background-color: var(--color-share); color: white; }
+        .btn-quick-install { background-color: var(--color-success); color: white; }
 
         .theme-toggle-btn {
             position: absolute;
@@ -358,8 +391,19 @@
     <header>
         <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">🌙 الوضع الليلي</button>
         <img src="logo.png" alt="شعار المتجر">
-        <!-- تم إضافة خاصية الاستماع للضغط الثلاثي السري هنا -->
         <h1 id="secret-title" style="cursor: pointer; user-select: none;" title="متجر نهوض">نهوض</h1>
+
+        <div class="quick-actions-bar">
+            <a href="https://wa.me/972597145813" target="_blank" class="action-btn btn-quick-whatsapp">
+                💬 تواصل معنا
+            </a>
+            <button onclick="shareStorePage()" class="action-btn btn-quick-share">
+                🔗 مشاركة المتجر
+            </button>
+            <button id="btn-install-app" onclick="installApp()" class="action-btn btn-quick-install">
+                📲 إضافة للشاشة
+            </button>
+        </div>
     </header>
 
     <nav>
@@ -401,7 +445,6 @@
                 </div>
             </div>
         </div>
-
         <!-- 2. صفحة السلة -->
         <div id="page-cart" class="page-section">
             <div class="box-section">
@@ -471,380 +514,403 @@
         </div>
     </div>
 <script>
-        // 🛑 استبدل القيم هنا بمفاتيحك من JSONBin 🛑
-const JSONBIN_ID = "6aac1670ac6210605ad91d0a";
-const JSONBIN_KEY = "$2a$10$oQEUOKNBFpYXUtYFXCS3Vu8YsK8OjtCn1v1zoAcW8HniwAnhfpCO2";
+        const JSONBIN_ID = "6aac1670ac6210605ad91d0a";
+        const JSONBIN_KEY = "$2a$10$oQEUOKNBFpYXUtYFXCS3Vu8YsK8OjtCn1v1zoAcW8HniwAnhfpCO2";
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
-const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
+        let cart = [];
+        const myWhatsAppNumber = "972597145813";
 
-let cart = [];
-const myWhatsAppNumber = "972597145813";
+        let productsStock = {
+            1: {
+                "أزرق": 5,
+                "أحمر": 3
+            }
+        };
 
-// الهيكل الابتدائي للمخزون
-let productsStock = {
-    1: {
-        "أزرق": 5,
-        "أحمر": 3
-    }
-};
-
-// 1. جلب المخزون الحقيقي من السحابة فور فتح الصفحة أو التحديث
-async function fetchStockFromCloud() {
-    try {
-        let response = await fetch(JSONBIN_URL + "/latest", {
-            headers: { "X-Master-Key": JSONBIN_KEY }
-        });
-        let data = await response.json();
-        if (data.record) {
-            productsStock = data.record;
-        }
-        updateStockDisplay(1);
-    } catch (e) {
-        console.error("خطأ في جلب البيانات من السحابة:", e);
-    }
-}
-
-// تشغيل جلب البيانات فوراً عند فتح المتجر
-fetchStockFromCloud();
-
-// 2. دالة الخصم من السحابة فور الضغط على زر الواتساب
-async function updateStockInCloud() {
-    cart.forEach(item => {
-        if (productsStock[item.id] && productsStock[item.id][item.color] !== undefined) {
-            // دعم الهيكلين (سواء رقم مباشر أو كائن يحتوي على stock)
-            if (typeof productsStock[item.id][item.color] === 'object') {
-                productsStock[item.id][item.color].stock = Math.max(0, productsStock[item.id][item.color].stock - item.qty);
-            } else {
-                productsStock[item.id][item.color] = Math.max(0, productsStock[item.id][item.color] - item.qty);
+        async function fetchStockFromCloud() {
+            try {
+                let response = await fetch(JSONBIN_URL + "/latest", {
+                    headers: { "X-Master-Key": JSONBIN_KEY }
+                });
+                let data = await response.json();
+                if (data.record) {
+                    productsStock = data.record;
+                }
+                updateStockDisplay(1);
+            } catch (e) {
+                console.error("خطأ في جلب البيانات من السحابة:", e);
             }
         }
-    });
 
-    try {
-        await fetch(JSONBIN_URL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': JSONBIN_KEY
-            },
-            body: JSON.stringify(productsStock)
-        });
-    } catch (e) {
-        console.error("خطأ في تحديث السحابة:", e);
-    }
-}
+        fetchStockFromCloud();
 
-// نظام عداد الزيارات السري بالخلفية
-(function countVisitor() {
-    let visits = localStorage.getItem('store_visits_count');
-    if (!visits) {
-        visits = 1;
-    } else {
-        visits = parseInt(visits) + 1;
-    }
-    localStorage.setItem('store_visits_count', visits);
-})();
-
-// إعداد نظام الضغط الثلاثي السري على كلمة "نهوض"
-let clickCounter = 0;
-let clickTimer = null;
-
-document.getElementById('secret-title').addEventListener('click', function() {
-    clickCounter++;
-    
-    if (clickTimer) clearTimeout(clickTimer);
-
-    if (clickCounter === 3) {
-        clickCounter = 0;
-        let password = prompt("أدخل الرقم السري لإظهار الإحصائيات:");
-        if (password === "2462021") {
-            let totalVisits = localStorage.getItem('store_visits_count') || 1;
-            showToast(`📊 عدد زيارات المتجر الكلي: ${totalVisits} زيارة`, 'success');
-        } else if (password !== null) {
-            showToast('الرقم السري غير صحيح!', 'danger');
-        }
-    } else {
-        clickTimer = setTimeout(() => {
-            clickCounter = 0;
-        }, 600);
-    }
-});
-
-function toggleTheme() {
-    let currentTheme = document.documentElement.getAttribute('data-theme');
-    let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-}
-
-function setTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('preferred-theme', theme);
-
-    let btn = document.getElementById('theme-btn');
-    if (theme === 'dark') {
-        btn.innerHTML = '☀️ الوضع النهاري';
-    } else {
-        btn.innerHTML = '🌙 الوضع الليلي';
-    }
-}
-
-(function initTheme() {
-    let savedTheme = localStorage.getItem('preferred-theme') || 'light';
-    setTheme(savedTheme);
-    updateStockDisplay(1);
-})();
-
-function showToast(message, type = 'success') {
-    let toast = document.getElementById("toast");
-    toast.innerText = message;
-    
-    if (type === 'success') {
-        toast.style.backgroundColor = '#27ae60';
-    } else if (type === 'danger') {
-        toast.style.backgroundColor = '#e74c3c';
-    } else {
-        toast.style.backgroundColor = '#333';
-    }
-
-    toast.classList.add("show");
-    setTimeout(function() {
-        toast.classList.remove("show");
-    }, 3000);
-}
-
-function switchTab(tabName) {
-    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-
-    document.getElementById('page-' + tabName).classList.add('active');
-    document.getElementById('btn-' + tabName).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function onProductColorChange(id) {
-    let select = document.getElementById('product-color-' + id);
-    let selectedOption = select.options[select.selectedIndex];
-    
-    let imgFilename = selectedOption.getAttribute('data-img');
-    document.getElementById('product-img-' + id).src = imgFilename;
-
-    updateStockDisplay(id);
-}
-
-function updateStockDisplay(id) {
-    if (!productsStock[id]) return;
-
-    let select = document.getElementById('product-color-' + id);
-    let selectedColor = select.value;
-    
-    let stockVal = productsStock[id][selectedColor];
-    let currentStock = (typeof stockVal === 'object') ? stockVal.stock : (stockVal ?? 0);
-
-    document.getElementById(`stock-count-${id}`).innerText = currentStock;
-
-    let addBtn = document.getElementById(`btn-add-${id}`);
-    if (currentStock === 0) {
-        addBtn.disabled = true;
-        addBtn.innerText = "❌ نفذت الكمية";
-        addBtn.style.backgroundColor = "#6c757d";
-    } else {
-        addBtn.disabled = false;
-        addBtn.innerText = "➕ إضافة للسلة";
-        addBtn.style.backgroundColor = "var(--color-success)";
-    }
-}
-
-function shareProduct(productName, price) {
-    let productUrl = window.location.href;
-    let shareData = {
-        title: 'متجر نهوض',
-        text: `👕 ${productName}\n💰 السعر: ${price} شيكل\nاطلبه الآن من متجر نهوض:`,
-        url: productUrl
-    };
-
-    if (navigator.share) {
-        navigator.share(shareData).catch(() => {});
-    } else {
-        let fallbackText = `${shareData.text} ${shareData.url}`;
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(fallbackText).then(() => {
-                showToast('تم نسخ تفاصيل ورابط القطعة بنجاح! 📋', 'success');
+        async function updateStockInCloud() {
+            cart.forEach(item => {
+                if (productsStock[item.id] && productsStock[item.id][item.color] !== undefined) {
+                    if (typeof productsStock[item.id][item.color] === 'object') {
+                        productsStock[item.id][item.color].stock = Math.max(0, productsStock[item.id][item.color].stock - item.qty);
+                    } else {
+                        productsStock[item.id][item.color] = Math.max(0, productsStock[item.id][item.color] - item.qty);
+                    }
+                }
             });
-        } else {
-            showToast('تعذر النسخ تلقائياً', 'danger');
+
+            try {
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_KEY
+                    },
+                    body: JSON.stringify(productsStock)
+                });
+            } catch (e) {
+                console.error("خطأ في تحديث السحابة:", e);
+            }
         }
-    }
-}
 
-function addToCartWithOptions(productId, name, price, colorSelectId, qtyInputId) {
-    let colorSelect = document.getElementById(colorSelectId);
-    let selectedColor = colorSelect.value;
-    
-    let qtyInput = document.getElementById(qtyInputId);
-    let quantityToAdd = parseInt(qtyInput.value) || 1;
+        (function countVisitor() {
+            let visits = localStorage.getItem('store_visits_count');
+            visits = visits ? parseInt(visits) + 1 : 1;
+            localStorage.setItem('store_visits_count', visits);
+        })();
 
-    let stockVal = productsStock[productId]?.[selectedColor];
-    let currentStock = (typeof stockVal === 'object') ? stockVal.stock : (stockVal ?? 0);
+        let clickCounter = 0;
+        let clickTimer = null;
 
-    if (quantityToAdd > currentStock) {
-        showToast(`عذراً، المتوفر من لون ${selectedColor} هو ${currentStock} قطع فقط!`, 'danger');
-        return;
-    }
+        document.getElementById('secret-title').addEventListener('click', function() {
+            clickCounter++;
+            if (clickTimer) clearTimeout(clickTimer);
 
-    let uniqueName = `${name} (اللون: ${selectedColor})`;
+            if (clickCounter === 3) {
+                clickCounter = 0;
+                let password = prompt("أدخل الرقم السري لإظهار الإحصائيات:");
+                if (password === "2462021") {
+                    let totalVisits = localStorage.getItem('store_visits_count') || 1;
+                    showToast(`📊 عدد زيارات المتجر الكلي: ${totalVisits} زيارة`, 'success');
+                } else if (password !== null) {
+                    showToast('الرقم السري غير صحيح!', 'danger');
+                }
+            } else {
+                clickTimer = setTimeout(() => { clickCounter = 0; }, 600);
+            }
+        });
 
-    let existingItem = cart.find(item => item.name === uniqueName);
-    let currentInCart = existingItem ? existingItem.qty : 0;
+        function shareStorePage() {
+            let shareData = {
+                title: 'متجر نهوض للملابس',
+                text: 'تصفح أحدث أطقم الملابس وأحدث العروض من متجر نهوض! 👕✨',
+                url: window.location.href
+            };
 
-    if ((currentInCart + quantityToAdd) > currentStock) {
-        showToast(`لا يمكنك إضافة أكثر من المخزون المتوفر (${currentStock} قطع).`, 'danger');
-        return;
-    }
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => {});
+            } else {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(window.location.href).then(() => {
+                        showToast('تم نسخ رابط المتجر بنجاح! 📋', 'success');
+                    });
+                } else {
+                    showToast('تعذر نسخ الرابط تلقائياً', 'danger');
+                }
+            }
+        }
 
-    if (existingItem) {
-        existingItem.qty += quantityToAdd;
-    } else {
-        cart.push({ id: productId, color: selectedColor, name: uniqueName, price: price, qty: quantityToAdd });
-    }
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
 
-    updateCartUI();
-    showToast(`تمت إضافة ${quantityToAdd} قطع للسلة! 🛒`, 'success');
-    
-    qtyInput.value = 1;
-}
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('تم تثبيت المتجر بنجاح! 📱', 'success');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                alert('لإضافة المتجر إلى الشاشة الرئيسية:\n\n• أجهزة أندرويد (Chrome): اضغط على القائمة (⋮) ثم اختر "الإضافة إلى الشاشة الرئيسية".\n\n• أجهزة آيفون (Safari): اضغط على زر المشاركة (📤) بالأسفل ثم اختر "الإضافة إلى الشاشة الرئيسية".');
+            }
+        }
 
-function removeFromCart(index) {
-    let removedItemName = cart[index].name;
-    if (cart[index].qty > 1) {
-        cart[index].qty -= 1;
-    } else {
-        cart.splice(index, 1);
-    }
-    updateCartUI();
-    showToast(`تم حذف قطعة من (${removedItemName}) 🗑️`, 'danger');
-}
+        function toggleTheme() {
+            let currentTheme = document.documentElement.getAttribute('data-theme');
+            let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
 
-function clearCart() {
-    if (confirm('هل أنت متأكد من تفريغ السلة بالكامل؟')) {
-        cart = [];
-        updateCartUI();
-        showToast('تم تفريغ السلة بنجاح 🗑️', 'danger');
-    }
-}
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('preferred-theme', theme);
 
-function updateCartUI() {
-    let totalCount = 0;
-    let itemsPrice = 0;
-    let cartHTML = '';
+            let btn = document.getElementById('theme-btn');
+            if (theme === 'dark') {
+                btn.innerHTML = '☀️ الوضع النهاري';
+            } else {
+                btn.innerHTML = '🌙 الوضع الليلي';
+            }
+        }
 
-    cart.forEach((item, index) => {
-        totalCount += item.qty;
-        let itemTotal = item.price * item.qty;
-        itemsPrice += itemTotal;
+        (function initTheme() {
+            let savedTheme = localStorage.getItem('preferred-theme') || 'light';
+            setTheme(savedTheme);
+            updateStockDisplay(1);
+        })();
 
-        cartHTML += `
-            <div class="cart-item">
-                <div class="cart-item-details">
-                    <b>${item.qty} × ${item.name}</b><br>
-                    <small style="color: var(--text-muted);">السعر للقطعة: ${item.price} شيكل</small>
-                </div>
-                <div class="cart-item-price-action">
-                    <b style="color: var(--color-success);">${itemTotal} شيكل</b>
-                    <button class="btn btn-danger" onclick="removeFromCart(${index})" title="حذف قطعة واحدة">🗑️</button>
-                </div>
-            </div>
-        `;
-    });
+        function showToast(message, type = 'success') {
+            let toast = document.getElementById("toast");
+            toast.innerText = message;
+            
+            if (type === 'success') {
+                toast.style.backgroundColor = '#27ae60';
+            } else if (type === 'danger') {
+                toast.style.backgroundColor = '#e74c3c';
+            } else {
+                toast.style.backgroundColor = '#333';
+            }
 
-    document.getElementById('cart-count').innerText = totalCount;
-    
-    let container = document.getElementById('cart-items-container');
-    let totalArea = document.getElementById('cart-total-area');
-    let btnToAddress = document.getElementById('btn-to-address');
-    let btnClearCart = document.getElementById('btn-clear-cart');
+            toast.classList.add("show");
+            setTimeout(function() {
+                toast.classList.remove("show");
+            }, 3000);
+        }
 
-    if (cart.length > 0) {
-        container.innerHTML = cartHTML;
-        document.getElementById('cart-total-price').innerText = itemsPrice + ' شيكل';
-        totalArea.style.display = 'flex';
-        btnToAddress.style.display = 'block';
-        btnClearCart.style.display = 'block';
-    } else {
-        container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 10px;">السلة فارغة حالياً.</p>';
-        totalArea.style.display = 'none';
-        btnToAddress.style.display = 'none';
-        btnClearCart.style.display = 'none';
-    }
+        function switchTab(tabName) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
 
-    calculateGrandTotal();
-}
+            document.getElementById('page-' + tabName).classList.add('active');
+            document.getElementById('btn-' + tabName).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-function calculateGrandTotal() {
-    let itemsPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    
-    let zoneSelect = document.getElementById('shipping-zone');
-    let selectedZone = zoneSelect.options[zoneSelect.selectedIndex];
-    let shippingPrice = parseInt(selectedZone.getAttribute('data-price') || 0);
+        function onProductColorChange(id) {
+            let select = document.getElementById('product-color-' + id);
+            let selectedOption = select.options[select.selectedIndex];
+            
+            let imgFilename = selectedOption.getAttribute('data-img');
+            document.getElementById('product-img-' + id).src = imgFilename;
 
-    document.getElementById('summary-items-price').innerText = itemsPrice;
-    document.getElementById('summary-shipping-price').innerText = shippingPrice;
-    document.getElementById('summary-grand-total').innerText = itemsPrice + shippingPrice;
-}
+            updateStockDisplay(id);
+        }
 
-async function sendToWhatsApp(e) {
-    e.preventDefault();
+        function updateStockDisplay(id) {
+            if (!productsStock[id]) return;
 
-    if (cart.length === 0) {
-        showToast('السلة فارغة! اختر بعض الملابس أولاً.', 'danger');
-        switchTab('home');
-        return;
-    }
+            let select = document.getElementById('product-color-' + id);
+            let selectedColor = select.value;
+            
+            let stockVal = productsStock[id][selectedColor];
+            let currentStock = (typeof stockVal === 'object') ? stockVal.stock : (stockVal ?? 0);
 
-    let name = document.getElementById('cust-name').value.trim();
-    let phoneInput = document.getElementById('cust-phone').value.trim();
-    let zoneSelect = document.getElementById('shipping-zone');
-    let zoneName = zoneSelect.value;
-    let shippingPrice = parseInt(zoneSelect.options[zoneSelect.selectedIndex].getAttribute('data-price') || 0);
-    let addressDetails = document.getElementById('cust-address-details').value.trim();
+            document.getElementById(`stock-count-${id}`).innerText = currentStock;
 
-    if (!name || !phoneInput || !zoneName || !addressDetails) {
-        showToast('يرجى تعبئة كافة تفاصيل العنوان والطلب الإجبارية!', 'danger');
-        return;
-    }
+            let addBtn = document.getElementById(`btn-add-${id}`);
+            if (currentStock === 0) {
+                addBtn.disabled = true;
+                addBtn.innerText = "❌ نفذت الكمية";
+                addBtn.style.backgroundColor = "#6c757d";
+            } else {
+                addBtn.disabled = false;
+                addBtn.innerText = "➕ إضافة للسلة";
+                addBtn.style.backgroundColor = "var(--color-success)";
+            }
+        }
 
-    // الخصم المباشر والتحديث المباشر في السحابة
-    showToast('جاري تسجيل الطلب وتحديث المخزون...', 'success');
-    await updateStockInCloud();
-    updateStockDisplay(1);
+        function shareProduct(productName, price) {
+            let productUrl = window.location.href;
+            let shareData = {
+                title: 'متجر نهوض',
+                text: `👕 ${productName}\n💰 السعر: ${price} شيكل\nاطلبه الآن من متجر نهوض:`,
+                url: productUrl
+            };
 
-    let itemsPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    let grandTotal = itemsPrice + shippingPrice;
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => {});
+            } else {
+                let fallbackText = `${shareData.text} ${shareData.url}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(fallbackText).then(() => {
+                        showToast('تم نسخ تفاصيل ورابط القطعة بنجاح! 📋', 'success');
+                    });
+                } else {
+                    showToast('تعذر النسخ تلقائياً', 'danger');
+                }
+            }
+        }
 
-    let secretBadge = "🔒 [طلب معتمد رسمي]";
+        function addToCartWithOptions(productId, name, price, colorSelectId, qtyInputId) {
+            let colorSelect = document.getElementById(colorSelectId);
+            let selectedColor = colorSelect.value;
+            
+            let qtyInput = document.getElementById(qtyInputId);
+            let quantityToAdd = parseInt(qtyInput.value) || 1;
 
-    let message = `*طلب جديد من متجر نهوض* 👕\n\n`;
-    message += `*الاسم:* ${name}\n`;
-    message += `*رقم التواصل:* ${phoneInput}\n`;
-    message += `*المنطقة:* ${zoneName}\n`;
-    message += `*تفاصيل العنوان:* ${addressDetails}\n\n`;
-    
-    message += `*القطع المطلوبة:*\n`;
-    cart.forEach((item, i) => {
-        message += `${i+1}. ${item.name} | العدد: ${item.qty} | السعر: ${item.price * item.qty} شيكل\n`;
-    });
+            let stockVal = productsStock[productId]?.[selectedColor];
+            let currentStock = (typeof stockVal === 'object') ? stockVal.stock : (stockVal ?? 0);
 
-    message += `\n*مجموع القطع:* ${itemsPrice} شيكل\n`;
-    message += `*تكلفة الشحن:* ${shippingPrice} شيكل\n`;
-    message += `*الإجمالي النهائي:* ${grandTotal} شيكل\n\n`;
-    
-    message += `${secretBadge}`;
+            if (quantityToAdd > currentStock) {
+                showToast(`عذراً، المتوفر من لون ${selectedColor} هو ${currentStock} قطع فقط!`, 'danger');
+                return;
+            }
 
-    cart = [];
-    updateCartUI();
+            let uniqueName = `${name} (اللون: ${selectedColor})`;
 
-    let whatsappURL = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(message)}`;
-    window.location.href = whatsappURL;
-}
+            let existingItem = cart.find(item => item.name === uniqueName);
+            let currentInCart = existingItem ? existingItem.qty : 0;
+
+            if ((currentInCart + quantityToAdd) > currentStock) {
+                showToast(`لا يمكنك إضافة أكثر من المخزون المتوفر (${currentStock} قطع).`, 'danger');
+                return;
+            }
+
+            if (existingItem) {
+                existingItem.qty += quantityToAdd;
+            } else {
+                cart.push({ id: productId, color: selectedColor, name: uniqueName, price: price, qty: quantityToAdd });
+            }
+
+            updateCartUI();
+            showToast(`تمت إضافة ${quantityToAdd} قطع للسلة! 🛒`, 'success');
+            
+            qtyInput.value = 1;
+        }
+
+        function removeFromCart(index) {
+            let removedItemName = cart[index].name;
+            if (cart[index].qty > 1) {
+                cart[index].qty -= 1;
+            } else {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+            showToast(`تم حذف قطعة من (${removedItemName}) 🗑️`, 'danger');
+        }
+
+        function clearCart() {
+            if (confirm('هل أنت متأكد من تفريغ السلة بالكامل؟')) {
+                cart = [];
+                updateCartUI();
+                showToast('تم تفريغ السلة بنجاح 🗑️', 'danger');
+            }
+        }
+
+        function updateCartUI() {
+            let totalCount = 0;
+            let itemsPrice = 0;
+            let cartHTML = '';
+
+            cart.forEach((item, index) => {
+                totalCount += item.qty;
+                let itemTotal = item.price * item.qty;
+                itemsPrice += itemTotal;
+
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <b>${item.qty} × ${item.name}</b><br>
+                            <small style="color: var(--text-muted);">السعر للقطعة: ${item.price} شيكل</small>
+                        </div>
+                        <div class="cart-item-price-action">
+                            <b style="color: var(--color-success);">${itemTotal} شيكل</b>
+                            <button class="btn btn-danger" onclick="removeFromCart(${index})" title="حذف قطعة واحدة">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cart-count').innerText = totalCount;
+            
+            let container = document.getElementById('cart-items-container');
+            let totalArea = document.getElementById('cart-total-area');
+            let btnToAddress = document.getElementById('btn-to-address');
+            let btnClearCart = document.getElementById('btn-clear-cart');
+
+            if (cart.length > 0) {
+                container.innerHTML = cartHTML;
+                document.getElementById('cart-total-price').innerText = itemsPrice + ' شيكل';
+                totalArea.style.display = 'flex';
+                btnToAddress.style.display = 'block';
+                btnClearCart.style.display = 'block';
+            } else {
+                container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 10px;">السلة فارغة حالياً.</p>';
+                totalArea.style.display = 'none';
+                btnToAddress.style.display = 'none';
+                btnClearCart.style.display = 'none';
+            }
+
+            calculateGrandTotal();
+        }
+
+        function calculateGrandTotal() {
+            let itemsPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            let zoneSelect = document.getElementById('shipping-zone');
+            let selectedZone = zoneSelect.options[zoneSelect.selectedIndex];
+            let shippingPrice = parseInt(selectedZone.getAttribute('data-price') || 0);
+
+            document.getElementById('summary-items-price').innerText = itemsPrice;
+            document.getElementById('summary-shipping-price').innerText = shippingPrice;
+            document.getElementById('summary-grand-total').innerText = itemsPrice + shippingPrice;
+        }
+
+        async function sendToWhatsApp(e) {
+            e.preventDefault();
+
+            if (cart.length === 0) {
+                showToast('السلة فارغة! اختر بعض الملابس أولاً.', 'danger');
+                switchTab('home');
+                return;
+            }
+
+            let name = document.getElementById('cust-name').value.trim();
+            let phoneInput = document.getElementById('cust-phone').value.trim();
+            let zoneSelect = document.getElementById('shipping-zone');
+            let zoneName = zoneSelect.value;
+            let shippingPrice = parseInt(zoneSelect.options[zoneSelect.selectedIndex].getAttribute('data-price') || 0);
+            let addressDetails = document.getElementById('cust-address-details').value.trim();
+
+            if (!name || !phoneInput || !zoneName || !addressDetails) {
+                showToast('يرجى تعبئة كافة تفاصيل العنوان والطلب الإجبارية!', 'danger');
+                return;
+            }
+
+            showToast('جاري تسجيل الطلب وتحديث المخزون...', 'success');
+            await updateStockInCloud();
+            updateStockDisplay(1);
+
+            let itemsPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let grandTotal = itemsPrice + shippingPrice;
+
+            let secretBadge = "🔒 [طلب معتمد رسمي]";
+
+            let message = `*طلب جديد من متجر نهوض* 👕\n\n`;
+            message += `*الاسم:* ${name}\n`;
+            message += `*رقم التواصل:* ${phoneInput}\n`;
+            message += `*المنطقة:* ${zoneName}\n`;
+            message += `*تفاصيل العنوان:* ${addressDetails}\n\n`;
+            
+            message += `*القطع المطلوبة:*\n`;
+            cart.forEach((item, i) => {
+                message += `${i+1}. ${item.name} | العدد: ${item.qty} | السعر: ${item.price * item.qty} شيكل\n`;
+            });
+
+            message += `\n*مجموع القطع:* ${itemsPrice} شيكل\n`;
+            message += `*تكلفة الشحن:* ${shippingPrice} شيكل\n`;
+            message += `*الإجمالي النهائي:* ${grandTotal} شيكل\n\n`;
+            
+            message += `${secretBadge}`;
+
+            cart = [];
+            updateCartUI();
+
+            let whatsappURL = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(message)}`;
+            window.location.href = whatsappURL;
+        }
     </script>
 </body>
 </html>
