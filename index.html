@@ -28,7 +28,6 @@
             --color-danger: #dc3545;
             --color-share: #17a2b8;
             --color-whatsapp: #25d366;
-            --color-refresh: #e67e22;
         }
 
         [data-theme="dark"] {
@@ -58,8 +57,8 @@
         .marquee-banner {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
-            padding: 8px 10px;
-            font-size: 13px;
+            padding: 6px 10px;
+            font-size: 12px;
             font-weight: bold;
             text-align: center;
             overflow: hidden;
@@ -69,7 +68,7 @@
 
         header {
             background-color: var(--card-bg);
-            padding: 25px 20px 15px 20px;
+            padding: 12px 10px 10px 10px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
             position: relative;
@@ -77,48 +76,49 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 6px;
         }
 
         header img {
-            width: 220px;
-            height: 220px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
             cursor: pointer;
         }
 
         header h1 {
-            font-size: 26px;
+            font-size: 1.1rem;
             font-weight: bold;
         }
 
         .quick-actions-bar {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             justify-content: center;
-            flex-wrap: wrap;
             width: 100%;
-            max-width: 600px;
-            margin-top: 10px;
+            max-width: 500px;
+            margin-top: 4px;
+            padding: 0 5px;
         }
 
         .action-btn {
+            flex: 1;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 20px;
+            gap: 4px;
+            padding: 6px 4px;
+            border-radius: 6px;
             border: none;
-            font-size: 13px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
-            transition: transform 0.2s ease, filter 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
         .action-btn:active {
@@ -127,21 +127,29 @@
 
         .btn-quick-whatsapp { background-color: var(--color-whatsapp); color: white; }
         .btn-quick-share { background-color: var(--color-share); color: white; }
-        .btn-quick-refresh { background-color: var(--color-refresh); color: white; }
         .btn-quick-install { background-color: var(--color-success); color: white; }
 
         .theme-toggle-btn {
             position: absolute;
-            left: 15px;
-            top: 20px;
+            left: 10px;
+            top: 10px;
             background: var(--color-sec-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 20px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle-btn:active {
+            transform: scale(0.85) rotate(45deg);
         }
 
         nav {
@@ -149,7 +157,7 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
@@ -160,9 +168,9 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
-            padding: 8px 16px;
+            padding: 6px 12px;
             cursor: pointer;
             border-radius: 6px;
             display: inline-flex;
@@ -185,8 +193,8 @@
 
         .container {
             max-width: 800px;
-            margin: 20px auto;
-            padding: 0 15px;
+            margin: 15px auto;
+            padding: 0 10px;
         }
 
         .page-section {
@@ -199,7 +207,7 @@
 
         .search-box-wrapper {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .suggestions-dropdown {
@@ -232,108 +240,77 @@
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
         }
 
-        .product-card {
+        .product-card-compact {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 8px;
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            position: relative;
-            overflow: hidden;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .product-tag {
-            position: absolute;
-            top: 28px;
-            right: 17px;
-            background: var(--color-danger);
-            color: white;
+        .product-card-compact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+        }
+
+        .product-card-compact img {
+           width: 100%;
+           height: 140px;
+           object-fit: contain; /* هذا التعديل يمنع القص ويظهر الصورة كاملة */
+           background-color: var(--card-bg); /* اختياري: خلفية متناسقة حول الصورة */
+           border-radius: 6px;
+        }
+
+        .product-card-compact h3 {
             font-size: 13px;
             font-weight: bold;
-            padding: 4px 10px;
-            border-radius: 6px;
-            z-index: 2;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
-        }
-
-        /* زر الثلاث نقاط الأول: فوق شمال الصورة (لصور القطع فقط) */
-        .card-top-menu-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 5;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .card-top-menu-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            display: block;
-            margin: 0 auto;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .price-tag {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: bold;
             color: var(--color-success);
         }
 
         .stock-badge {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             background: var(--color-sec-bg);
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
             display: inline-block;
             font-weight: bold;
         }
 
-        /* زر الثلاث نقاط الثاني: بجانب المتوفر (للأسعار والخيارات فقط) */
         .card-menu-btn {
             background: var(--color-sec-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-right: 6px;
+            margin-right: 4px;
             vertical-align: middle;
-        }
-
-        .card-menu-btn:hover {
-            background: var(--border-color);
         }
 
         .product-options-row {
@@ -399,21 +376,21 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
         }
 
         .cart-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -421,41 +398,41 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            margin-top: 20px;
-            padding: 12px 15px;
+            margin-top: 15px;
+            padding: 10px 12px;
             background-color: var(--color-sec-bg);
             border-radius: 8px;
             border: 1px solid var(--border-color);
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: right;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-weight: bold;
+            font-size: 13px;
         }
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
             background: var(--bg-color);
             color: var(--text-color);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .required-star {
             color: var(--color-danger);
         }
 
-        /* نافذة العرض المنبثقة الأولى (للصور فقط) */
         .lightbox-modal {
             display: none;
             position: fixed;
@@ -468,15 +445,15 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            padding: 20px;
+            padding: 15px;
         }
 
         .lightbox-content-container {
-            max-width: 600px;
+            max-width: 320px;
             width: 100%;
             background: var(--card-bg);
             border-radius: 12px;
-            padding: 20px;
+            padding: 12px;
             text-align: center;
             box-shadow: 0 5px 25px rgba(0,0,0,0.5);
             max-height: 85vh;
@@ -486,16 +463,15 @@
 
         .lightbox-close {
             position: absolute;
-            top: 20px;
-            left: 25px;
+            top: 10px;
+            left: 15px;
             color: white;
-            font-size: 35px;
+            font-size: 26px;
             font-weight: bold;
             cursor: pointer;
             z-index: 10;
         }
 
-        /* نافذة منبثقة ثانية لتكبير الصورة فوق النافذة الأولى */
         .image-preview-overlay {
             display: none;
             position: fixed;
@@ -508,36 +484,8 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            padding: 20px;
-        }
-
-        .sub-images-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .sub-img-item {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-            background: var(--bg-color);
+            padding: 15px;
             cursor: pointer;
-        }
-
-        .sub-img-item img {
-            width: 100%;
-            height: 130px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .sub-img-title {
-            font-size: 12px;
-            padding: 6px;
-            font-weight: bold;
-            color: var(--text-color);
         }
 
         .variant-detail-row {
@@ -546,28 +494,27 @@
             align-items: center;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-radius: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-align: right;
-            gap: 10px;
+            gap: 8px;
         }
 
-        /* الإشعار ليكون دائماً في المقدمة */
         #toast {
             visibility: hidden;
-            min-width: 260px;
+            min-width: 250px;
             background-color: #27ae60;
             color: #fff;
             text-align: center;
             border-radius: 8px;
-            padding: 12px 20px;
+            padding: 10px 15px;
             position: fixed;
             z-index: 4000;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             opacity: 0;
@@ -577,7 +524,7 @@
         #toast.show {
             visibility: visible;
             opacity: 1;
-            bottom: 40px;
+            bottom: 30px;
         }
     </style>
 </head>
@@ -588,46 +535,32 @@
         🔥 أهلاً بكم في متجر نهوض | توصيل سريع لكافة مناطق غزة والوسطى وجنوب القطع 🚚✨
     </div>
 
-    <!-- النافذة المنبثقة الأولى: خاصة بصور القطع فقط (زر الثلاث نقاط فوق) -->
-    <div id="lightbox-images" class="lightbox-modal">
-        <span class="lightbox-close" onclick="closeImageLightbox()">&times;</span>
-        <div class="lightbox-content-container">
-            <h3 id="modal-images-title" style="margin-bottom: 10px;">صور القطع</h3>
-            <div id="modal-sub-images-container">
-                <!-- صور القطع فقط -->
-            </div>
+    <div id="lightbox" class="lightbox-modal" onclick="closeLightbox(event)">
+        <span class="lightbox-close" onclick="closeLightboxDirect()">&times;</span>
+        <div class="lightbox-content-container" id="lightbox-inner-box">
+            <h3 id="modal-product-title" style="margin-bottom: 5px;">التفاصيل</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">🔍 انقر على أي صورة لتكبيرها واستعراضها</p>
+            <div id="modal-sub-images-container"></div>
         </div>
     </div>
 
-    <!-- النافذة المنبثقة الثانية: خاصة بالأسعار والخيارات والأسعار (زر الثلاث نقاط تحت) -->
-    <div id="lightbox-prices" class="lightbox-modal">
-        <span class="lightbox-close" onclick="closePriceLightbox()">&times;</span>
-        <div class="lightbox-content-container">
-            <h3 id="modal-prices-title" style="margin-bottom: 10px;">خيارات القطع والأسعار</h3>
-            <div id="modal-prices-container">
-                <!-- خيارات الأسعار والقطع والكميات -->
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة منبثقة ثالثة لتكبير الصورة المفردة -->
-    <div id="image-preview-overlay" class="image-preview-overlay">
+    <div id="image-preview-overlay" class="image-preview-overlay" onclick="closeImagePreview()">
         <span class="lightbox-close" onclick="closeImagePreview()">&times;</span>
-        <div style="text-align: center;">
+        <div style="text-align: center;" onclick="event.stopPropagation()">
             <img id="preview-zoomed-img" src="" style="max-width: 90vw; max-height: 75vh; border-radius: 8px; object-fit: contain;" onerror="this.src='logo.png'">
-            <h4 id="preview-zoomed-title" style="color: white; margin-top: 15px; font-size: 16px;"></h4>
+            <h4 id="preview-zoomed-title" style="color: white; margin-top: 12px; font-size: 15px;"></h4>
         </div>
     </div>
 
     <header>
-        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme();">🌙 الوضع الليلي</button>
-        <img src="logo.png" alt="شعار المتجر" onclick="openSingleImageOverlay('logo.png', 'شعار المتجر')">
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme();" title="تبديل الوضع">☀️</button>
+        
+        <img src="logo.png" alt="شعار المتجر" onerror="this.src='logo.png'" onclick="openSingleImageOverlay('logo.png', 'شعار المتجر')">
         <h1 id="secret-title" style="cursor: pointer; user-select: none;">نهوض</h1>
 
         <div class="quick-actions-bar">
             <a href="https://wa.me/972597145813" target="_blank" class="action-btn btn-quick-whatsapp">💬 تواصل معنا</a>
             <button onclick="shareStorePage();" class="action-btn btn-quick-share">🔗 مشاركة المتجر</button>
-            <button onclick="confirmRefresh();" class="action-btn btn-quick-refresh">🔄 تحديث الصفحة</button>
             <button id="btn-install-app" onclick="installApp();" class="action-btn btn-quick-install">📲 إضافة للشاشة</button>
         </div>
     </header>
@@ -640,28 +573,25 @@
 
     <div class="container">
         <div id="page-home" class="page-section active">
-            <h2 style="margin-bottom: 15px; text-align: right;">أحدث الأطقم المتوفرة</h2>
-            
-            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
-                <button class="action-btn" onclick="filterByCategory('all')" style="background: var(--color-primary); color: white;">📂 جميع القطع</button>
-                <button class="action-btn" onclick="filterByCategory('ولادي')" style="background: #3498db; color: white;">👦 ولادي</button>
-                <button class="action-btn" onclick="filterByCategory('بناتي')" style="background: #e91e63; color: white;">👧 بناتي</button>
+            <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap;">
+                <button class="action-btn" id="cat-btn-all" onclick="filterByCategory('all')" style="background: var(--color-primary); color: white; flex: none; padding: 6px 12px;">📂 جميع القطع</button>
+                <button class="action-btn" id="cat-btn-male" onclick="filterByCategory('ولادي')" style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); flex: none; padding: 6px 12px;">👦 ولادي</button>
+                <button class="action-btn" id="cat-btn-female" onclick="filterByCategory('بناتي')" style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); flex: none; padding: 6px 12px;">👧 بناتي</button>
             </div>
 
             <div class="search-box-wrapper">
-                <input type="text" id="search-input" placeholder="🔍 ابحث عن اسم القطعة..." onkeyup="filterProducts()" autocomplete="off" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-size: 14px;">
+                <input type="text" id="search-input" placeholder="🔍 ابحث عن اسم القطعة في القسم الحالي..." onkeyup="filterProducts()" autocomplete="off" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); font-size: 13px;">
                 <div id="suggestions-container" class="suggestions-dropdown"></div>
             </div>
 
-            <div class="products-grid" id="products-container">
-            </div>
+            <div class="products-grid" id="products-container"></div>
         </div>
 
         <div id="page-cart" class="page-section">
             <div class="box-section">
                 <div class="cart-header-row">
-                    <h2>محتويات السلة</h2>
-                    <button class="btn btn-danger" id="btn-clear-cart" onclick="clearCart();" style="display:none; width: auto; font-size: 12px; padding: 6px 12px;">🗑️ تفريغ السلة</button>
+                    <h2 style="font-size: 1.1rem;">محتويات السلة</h2>
+                    <button class="btn btn-danger" id="btn-clear-cart" onclick="clearCart();" style="display:none; width: auto; font-size: 11px; padding: 5px 10px;">🗑️ تفريغ السلة</button>
                 </div>
                 <div id="cart-items-container">
                     <p style="color: var(--text-muted);">السلة فارغة حالياً.</p>
@@ -672,13 +602,13 @@
                     <span id="cart-total-price" style="color: var(--color-success);">0 شيكل</span>
                 </div>
                 <br>
-                <button class="btn btn-primary" onclick="switchTab('checkout');" id="btn-to-address" style="display:none; font-size: 16px;">متابعة وإضافة العنوان 📍</button>
+                <button class="btn btn-primary" onclick="switchTab('checkout');" id="btn-to-address" style="display:none; font-size: 15px;">متابعة وإضافة العنوان 📍</button>
             </div>
         </div>
 
         <div id="page-checkout" class="page-section">
             <div class="box-section">
-                <h2>تفاصيل العنوان والشحن</h2>
+                <h2 style="font-size: 1.1rem;">تفاصيل العنوان والشحن</h2>
                 <br>
                 <form id="order-form" onsubmit="sendToWhatsApp(event)">
                     <div class="form-group">
@@ -711,11 +641,11 @@
                         <textarea id="cust-address-details" rows="3" placeholder="مثال: دير البلح - شارع عكيلة" required></textarea>
                     </div>
 
-                    <div style="background: var(--color-sec-bg); padding: 15px; border-radius: 8px; text-align: right; margin: 15px 0; border: 1px solid var(--border-color);">
+                    <div style="background: var(--color-sec-bg); padding: 12px; border-radius: 8px; text-align: right; margin: 12px 0; border: 1px solid var(--border-color); font-size: 13px;">
                         <p><b>مجموع القطع:</b> <span id="summary-items-price">0</span> شيكل</p>
                         <p><b>تكلفة التوصيل:</b> <span id="summary-shipping-price">0</span> شيكل</p>
-                        <hr style="margin: 8px 0; border-color: var(--border-color);">
-                        <p style="font-size: 18px; color: var(--color-success);"><b>الإجمالي النهائي: <span id="summary-grand-total">0</span> شيكل</b></p>
+                        <hr style="margin: 6px 0; border-color: var(--border-color);">
+                        <p style="font-size: 16px; color: var(--color-success);"><b>الإجمالي النهائي: <span id="summary-grand-total">0</span> شيكل</b></p>
                     </div>
 
                     <button type="submit" id="btn-submit-order" class="btn btn-whatsapp">📲 إرسال الطلب عبر الواتساب</button>
@@ -726,6 +656,7 @@
 
     <script>
         const myWhatsAppNumber = "972597145813";
+        let currentActiveCategory = 'all';
 
         let productsList = [
             {
@@ -735,17 +666,19 @@
                 colors: ["أحمر", "أزرق"],
                 sizes: ["سنة", "سنتين", "3 سنوات"],
                 subImages: [
-                    { title: "القطعة 1", img: "product1-red.png" },
-                    { title: "القطعة 2", img: "product1-blue.png" },
-                    { title: "القطعة 3", img: "logo.png" }
+                    { title: "القطعة 1", img: "1.jpeg" },
+                    { title: "القطعة 2", img: "2.jpeg" },
+                    { title: "القطعة 3", img: "3.jpeg" },
+                    { title: "القطعة 4", img: "4.jpeg" },
+                    { title: "القطعة 5", img: "5.jpeg" },
                 ],
                 variants: [
-                    { color: "أحمر", size: "سنة", price: 45, stock: 5, img: "product1-red.png", tag: "جديد" },
-                    { color: "أحمر", size: "سنتين", price: 45, stock: 3, img: "product1-red.png", tag: "جديد" },
-                    { color: "أحمر", size: "3 سنوات", price: 45, stock: 0, img: "product1-red.png", tag: "نفذت الكمية" },
-                    { color: "أزرق", size: "سنة", price: 45, stock: 4, img: "product1-blue.png", tag: "جديد" },
-                    { color: "أزرق", size: "سنتين", price: 45, stock: 6, img: "product1-blue.png", tag: "جديد" },
-                    { color: "أزرق", size: "3 سنوات", price: 45, stock: 2, img: "product1-blue.png", tag: "جديد" }
+                    { color: "أحمر", size: "سنة", price: 45, stock: 5, img: "11.jpeg", tag: "جديد" },
+                    { color: "أحمر", size: "سنتين", price: 45, stock: 3, img: "11.jpeg", tag: "جديد" },
+                    { color: "أحمر", size: "3 سنوات", price: 45, stock: 0, img: "11.jpeg", tag: "نفذت الكمية" },
+                    { color: "أزرق", size: "سنة", price: 45, stock: 4, img: "11.jpeg", tag: "جديد" },
+                    { color: "أزرق", size: "سنتين", price: 45, stock: 6, img: "11.jpeg", tag: "جديد" },
+                    { color: "أزرق", size: "3 سنوات", price: 45, stock: 2, img: "11.jpeg", tag: "جديد" }
                 ]
             },
             {
@@ -754,17 +687,14 @@
                 category: "بناتي",
                 colors: ["أحمر", "أزرق"],
                 sizes: ["سنتين", "3 سنوات", "4 سنوات"],
-                subImages: [
-                    { title: "القطعة 1", img: "product1-red.png" },
-                    { title: "القطعة 2", img: "logo.png" }
-                ],
+                subImages: [],
                 variants: [
-                    { color: "أحمر", size: "سنتين", price: 55, stock: 4, img: "product1-red.png", tag: "عرض خاص" },
-                    { color: "أحمر", size: "3 سنوات", price: 55, stock: 2, img: "product1-red.png", tag: "عرض خاص" },
-                    { color: "أحمر", size: "4 سنوات", price: 55, stock: 5, img: "product1-red.png", tag: "عرض خاص" },
-                    { color: "أزرق", size: "سنتين", price: 55, stock: 3, img: "product1-blue.png", tag: "عرض خاص" },
-                    { color: "أزرق", size: "3 سنوات", price: 55, stock: 1, img: "product1-blue.png", tag: "عرض خاص" },
-                    { color: "أزرق", size: "4 سنوات", price: 55, stock: 4, img: "product1-blue.png", tag: "عرض خاص" }
+                    { color: "أحمر", size: "سنتين", price: 55, stock: 4, img: "product1-red.jpg", tag: "عرض خاص" },
+                    { color: "أحمر", size: "3 سنوات", price: 55, stock: 2, img: "product1-red.jpg", tag: "عرض خاص" },
+                    { color: "أحمر", size: "4 سنوات", price: 55, stock: 5, img: "product1-red.jpg", tag: "عرض خاص" },
+                    { color: "أزرق", size: "سنتين", price: 55, stock: 3, img: "product1-blue.jpg", tag: "عرض خاص" },
+                    { color: "أزرق", size: "3 سنوات", price: 55, stock: 1, img: "product1-blue.jpg", tag: "عرض خاص" },
+                    { color: "أزرق", size: "4 سنوات", price: 55, stock: 4, img: "product1-blue.jpg", tag: "عرض خاص" }
                 ]
             }
         ];
@@ -772,10 +702,17 @@
         let cart = JSON.parse(localStorage.getItem('store_cart')) || [];
 
         const colorMap = {
-            "أحمر": "🔴 أحمر", "أزرق": "🔵 أزرق", "أخضر": "🟢 أخضر",
-            "أسود": "⚫ أسود", "أبيض": "⚪ أبيض", "أصفر": "🟡 أصفر",
-            "زهري": "🩷 زهري", "بيج": "🟤 بيج", "برتقالي": "🟠 برتقالي",
-            "رمادي": "🔘 رمادي", "بني": "🟫 بني"
+            "أحمر": "🔴 أحمر",
+            "أزرق": "🔵 أزرق",
+            "أخضر": "🟢 أخضر",
+            "أسود": "⚫ أسود",
+            "أبيض": "⚪ أبيض",
+            "أصفر": "🟡 أصفر",
+            "زهري": "🩷 زهري",
+            "بيج": "🟤 بيج",
+            "برتقالي": "🟠 برتقالي",
+            "رمادي": "🔘 رمادي",
+            "بني": "🟫 بني"
         };
 
         function renderProducts(listToRender) {
@@ -783,7 +720,7 @@
             let html = '';
 
             if (listToRender.length === 0) {
-                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 30px;">لا توجد منتجات معروضة حالياً.</p>';
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 30px;">لا توجد منتجات مطابقة في هذا القسم.</p>';
                 return;
             }
 
@@ -791,110 +728,110 @@
                 let defaultVariant = p.variants[0];
 
                 html += `
-                    <div class="product-card" data-name="${p.name.toLowerCase()}" data-category="${p.category}" id="product-card-${p.id}">
-                        <div id="product-tag-container-${p.id}">
-                            ${defaultVariant.tag ? `<div class="product-tag">${defaultVariant.tag}</div>` : ''}
-                        </div>
-
-                        <!-- الزر الأول للثلاث نقاط: فوق على شمال الصورة (لعرض صور قطع الطقم فقط) -->
-                        <button class="card-top-menu-btn" onclick="openProductImageGallery(${p.id})" title="عرض صور قطع الطقم">⋮</button>
-
-                        <img id="product-img-${p.id}" src="${defaultVariant.img}" onerror="this.src='logo.png'" onclick="openProductImageGallery(${p.id})" alt="${p.name}">
+                    <div class="product-card-compact" onclick="openFullProductModal(${p.id})" style="position: relative;">
+                        ${defaultVariant.tag ? `<div class="product-tag" style="position: absolute; top: 6px; right: 6px; background: var(--color-danger); color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; z-index: 5;">${defaultVariant.tag}</div>` : ''}
+                        <img src="${defaultVariant.img}" onerror="this.src='logo.png'" alt="${p.name}">
                         <h3>${p.name}</h3>
-                        <div style="font-size: 12px; color: var(--text-muted);">القسم: ${p.category}</div>
-                        <div class="price-tag" id="product-price-${p.id}">${defaultVariant.price} شيكل</div>
-                        
-                        <div>
-                            <span class="stock-badge">المتوفر: <span id="stock-count-${p.id}">${defaultVariant.stock}</span> قطع</span>
-                            <!-- الزر الثاني للثلاث نقاط: بجانب المتوفر (لعرض الأسعار وخيارات القطع فقط) -->
-                            <button class="card-menu-btn" onclick="openProductPriceOptions(${p.id})" title="عرض الأسعار وخيارات القطع">⋮</button>
-                        </div>
-
-                        <div class="product-options-row">
-                            <div class="option-box-color">
-                                <label>اللون:</label>
-                                <select id="product-color-${p.id}" onchange="onProductOptionChange(${p.id})">
-                                    ${p.colors.map(c => `<option value="${c}">${colorMap[c] || c}</option>`).join('')}
-                                </select>
-                            </div>
-                            <div class="option-box-size">
-                                <label>المقاس:</label>
-                                <select id="product-size-${p.id}" onchange="onProductOptionChange(${p.id})">
-                                    ${p.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
-                                </select>
-                            </div>
-                            <div class="option-box-qty">
-                                <label>الكمية:</label>
-                                <input type="number" id="product-qty-${p.id}" value="1" min="1" max="10">
-                            </div>
-                        </div>
-
-                        <button class="btn btn-add" id="btn-add-${p.id}" onclick="addToCartWithOptions(${p.id}, '${p.name}', 'product-color-${p.id}', 'product-size-${p.id}', 'product-qty-${p.id}')">➕ إضافة للسلة</button>
-                        <button class="btn btn-share" onclick="shareProduct('${p.name}', ${defaultVariant.price})">🔗 مشاركة القطعة</button>
                     </div>
                 `;
             });
             container.innerHTML = html;
         }
 
-        // دالة زر الثلاث نقاط العلوي: تعرض صور القطع فقط
-        function openProductImageGallery(productId) {
+        function openFullProductModal(productId) {
             let product = productsList.find(p => p.id === productId);
             if (!product) return;
 
-            document.getElementById('modal-images-title').innerText = `صور قطع الطقم: ${product.name}`;
-            let subContainer = document.getElementById('modal-sub-images-container');
-            let subHtml = '';
+            let defaultVariant = product.variants[0];
 
+            document.getElementById('modal-product-title').innerText = product.name;
+            let subContainer = document.getElementById('modal-sub-images-container');
+            
+            let subImagesHtml = '';
             if (product.subImages && product.subImages.length > 0) {
-                subHtml = '<div class="sub-images-grid">';
+                subImagesHtml = `<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 10px; width: 100%;">`;
                 product.subImages.forEach(sub => {
-                    subHtml += `
-                        <div class="sub-img-item" onclick="openSingleImageOverlay('${sub.img}', '${sub.title}')">
-                            <img src="${sub.img}" onerror="this.src='logo.png'" alt="${sub.title}">
-                            <div class="sub-img-title">${sub.title}</div>
+                    subImagesHtml += `
+                        <div style="text-align: center; cursor: pointer;" onclick="openSingleImageOverlay('${sub.img}', '${sub.title}')">
+                            <img src="${sub.img}" onerror="this.src='logo.png'" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color); display: block; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                            <div style="font-size: 8px; color: var(--text-muted); margin-top: 2px;">${sub.title}</div>
                         </div>
                     `;
                 });
-                subHtml += '</div>';
-            } else {
-                subHtml = '<p style="color: var(--text-muted); padding: 10px;">لا توجد صور تفصيلية إضافية.</p>';
+                subImagesHtml += `</div>`;
             }
 
-            subContainer.innerHTML = subHtml;
-            document.getElementById('lightbox-images').style.display = "flex";
+            let modalHtml = `
+                <div style="text-align: center; position: relative;">
+                    <div style="background: var(--bg-color); border-radius: 8px; padding: 8px; margin-bottom: 6px; border: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center;">
+                        <img id="modal-product-img-${product.id}" src="${defaultVariant.img}" onerror="this.src='logo.png'" onclick="openSingleImageOverlay('${defaultVariant.img}', '${product.name}')" style="max-width: 100%; max-height: 170px; width: auto; height: auto; object-fit: contain; border-radius: 6px; cursor: pointer; display: block;">
+                    </div>
+
+                    ${subImagesHtml}
+                    
+                    <div class="price-tag" id="modal-product-price-${product.id}" style="font-size: 16px; font-weight: bold; color: var(--color-success); margin: 8px 0 4px 0;">${defaultVariant.price} شيكل</div>
+                    
+                    <div style="margin-bottom: 8px;">
+                        <span class="stock-badge">المتوفر: <span id="modal-stock-count-${product.id}">${defaultVariant.stock}</span> قطع</span>
+                        <button class="card-menu-btn" onclick="openProductVariantsOnly(${product.id})" title="خيارات القطع والأسعار">⋮</button>
+                    </div>
+
+                    <div class="product-options-row">
+                        <div class="option-box-color">
+                            <label>اللون:</label>
+                            <select id="modal-product-color-${product.id}" onchange="onModalOptionChange(${product.id})">
+                                ${product.colors.map(c => `<option value="${c}">${colorMap[c] || c}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="option-box-size">
+                            <label>المقاس:</label>
+                            <select id="modal-product-size-${product.id}" onchange="onModalOptionChange(${product.id})">
+                                ${product.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="option-box-qty">
+                            <label>الكمية:</label>
+                            <input type="number" id="modal-product-qty-${product.id}" value="1" min="1" max="10">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-add" id="modal-btn-add-${product.id}" onclick="addToCartWithOptions(${product.id}, '${product.name}', 'modal-product-color-${product.id}', 'modal-product-size-${product.id}', 'modal-product-qty-${product.id}')" style="margin-top: 8px; font-size: 13px; padding: 8px;">➕ إضافة للسلة</button>
+                    <button class="btn btn-share" onclick="shareProduct('${product.name}', ${defaultVariant.price})" style="margin-top: 6px; font-size: 13px; padding: 8px;">🔗 مشاركة القطعة</button>
+                </div>
+            `;
+
+            subContainer.innerHTML = modalHtml;
+            document.getElementById('lightbox').style.display = "flex";
         }
 
-        // دالة زر الثلاث نقاط السفلي: تعرض الأسعار وخيارات القطع والتوفر فقط
-        function openProductPriceOptions(productId) {
+        function openProductVariantsOnly(productId) {
             let product = productsList.find(p => p.id === productId);
             if (!product) return;
 
-            document.getElementById('modal-prices-title').innerText = `أسعار وخيارات طقم: ${product.name}`;
-            let priceContainer = document.getElementById('modal-prices-container');
-            let priceHtml = '<h4 style="margin-bottom: 12px; text-align: right;">قائمة الأسعار والخيارات المتاحة:</h4>';
-
+            document.getElementById('modal-product-title').innerText = `خيارات وأسعار: ${product.name}`;
+            let subContainer = document.getElementById('modal-sub-images-container');
+            let subHtml = `<h4 style="margin-bottom: 10px; text-align: right; font-size: 13px;">خيارات القطع والأسعار والإضافات الفورية:</h4>`;
+            
             product.variants.forEach((v) => {
                 let stockText = v.stock > 0 ? `متوفر (${v.stock} قطع)` : `نفذت الكمية`;
                 let stockColor = v.stock > 0 ? 'var(--color-success)' : 'var(--color-danger)';
-                priceHtml += `
+                subHtml += `
                     <div class="variant-detail-row">
-                        <div style="flex: 1; text-align: right;">
+                        <div style="flex: 1; text-align: right; font-size: 12px;">
                             <b>اللون: ${colorMap[v.color] || v.color} | المقاس: ${v.size}</b><br>
                             <small style="color: var(--text-muted);">
-                                السعر: <b style="color: var(--color-success);">${v.price} شيكل</b> - 
+                                ${v.price} شيكل - 
                                 <span style="color: ${stockColor}; font-weight: bold;">${stockText}</span>
                             </small>
                         </div>
                         <div>
-                            <button class="btn btn-add" style="padding: 6px 12px; font-size: 13px; width: auto;" ${v.stock === 0 ? 'disabled style="background-color: #ccc; cursor: not-allowed;"' : ''} onclick="addVariantDirectly(${product.id}, '${v.color}', '${v.size}')">➕ إضافة</button>
+                            <button class="btn btn-add" style="padding: 5px 10px; font-size: 12px; width: auto;" ${v.stock === 0 ? 'disabled style="background-color: #ccc; cursor: not-allowed;"' : ''} onclick="addVariantDirectly(${product.id}, '${v.color}', '${v.size}')">➕ إضافة</button>
                         </div>
                     </div>
                 `;
             });
 
-            priceContainer.innerHTML = priceHtml;
-            document.getElementById('lightbox-prices').style.display = "flex";
+            subContainer.innerHTML = subHtml;
         }
 
         function openSingleImageOverlay(imgSrc, title) {
@@ -907,12 +844,14 @@
             document.getElementById('image-preview-overlay').style.display = "none";
         }
 
-        function closeImageLightbox() {
-            document.getElementById('lightbox-images').style.display = "none";
+        function closeLightbox(event) {
+            if (event.target.id === 'lightbox') {
+                document.getElementById('lightbox').style.display = "none";
+            }
         }
 
-        function closePriceLightbox() {
-            document.getElementById('lightbox-prices').style.display = "none";
+        function closeLightboxDirect() {
+            document.getElementById('lightbox').style.display = "none";
         }
 
         function addVariantDirectly(productId, color, size) {
@@ -946,39 +885,53 @@
         }
 
         function filterByCategory(category) {
-            let searchInput = document.getElementById('search-input');
-            if (searchInput) searchInput.value = '';
+            currentActiveCategory = category.toLowerCase().trim();
+            document.getElementById('search-input').value = '';
+            
+            let btnAll = document.getElementById('cat-btn-all');
+            let btnMale = document.getElementById('cat-btn-male');
+            let btnFemale = document.getElementById('cat-btn-female');
+
+            btnAll.style.background = 'var(--card-bg)'; btnAll.style.color = 'var(--text-color)'; btnAll.style.border = '1px solid var(--border-color)';
+            btnMale.style.background = 'var(--card-bg)'; btnMale.style.color = 'var(--text-color)'; btnMale.style.border = '1px solid var(--border-color)';
+            btnFemale.style.background = 'var(--card-bg)'; btnFemale.style.color = 'var(--text-color)'; btnFemale.style.border = '1px solid var(--border-color)';
+
             if (category === 'all') {
+                btnAll.style.background = 'var(--color-primary)'; btnAll.style.color = 'white'; btnAll.style.border = 'none';
                 renderProducts(productsList);
-            } else {
-                let filtered = productsList.filter(p => p.category.toLowerCase() === category.toLowerCase().trim());
+            } else if (category === 'ولادي') {
+                btnMale.style.background = '#3498db'; btnMale.style.color = 'white'; btnMale.style.border = 'none';
+                let filtered = productsList.filter(p => p.category.toLowerCase() === 'ولادي');
+                renderProducts(filtered);
+            } else if (category === 'بناتي') {
+                btnFemale.style.background = '#e91e63'; btnFemale.style.color = 'white'; btnFemale.style.border = 'none';
+                let filtered = productsList.filter(p => p.category.toLowerCase() === 'بناتي');
                 renderProducts(filtered);
             }
         }
 
         function filterProducts() {
             let query = document.getElementById('search-input').value.trim().toLowerCase();
-            let container = document.getElementById('products-container');
-            let cards = container.getElementsByClassName('product-card');
             let suggestionsBox = document.getElementById('suggestions-container');
 
-            for (let i = 0; i < cards.length; i++) {
-                let card = cards[i];
-                let productName = card.getAttribute('data-name');
-                card.style.display = (productName.includes(query) || query === "") ? "" : "none";
+            let baseList = productsList;
+            if (currentActiveCategory !== 'all') {
+                baseList = productsList.filter(p => p.category.toLowerCase() === currentActiveCategory);
             }
 
+            let filteredList = baseList.filter(p => p.name.toLowerCase().includes(query));
+            renderProducts(filteredList);
+
             if (query.length > 0) {
-                let matchedProducts = productsList.filter(p => p.name.toLowerCase().includes(query));
-                if (matchedProducts.length > 0) {
+                if (filteredList.length > 0) {
                     let suggestionsHTML = "";
-                    matchedProducts.forEach(p => {
-                        suggestionsHTML += `<div class="suggestion-item" onclick="selectSuggestion('${p.name}')">🛍️ ${p.name}</div>`;
+                    filteredList.forEach(p => {
+                        suggestionsHTML += `<div class="suggestion-item" onclick="selectSuggestion('${p.name}')">🛍 ${p.name}</div>`;
                     });
                     suggestionsBox.innerHTML = suggestionsHTML;
                     suggestionsBox.style.display = "block";
                 } else {
-                    suggestionsBox.innerHTML = `<div class="suggestion-item" style="color: var(--text-muted);">لا توجد نتائج مطابقة</div>`;
+                    suggestionsBox.innerHTML = `<div class="suggestion-item" style="color: var(--text-muted);">لا توجد نتائج مطابقة في هذا القسم</div>`;
                     suggestionsBox.style.display = "block";
                 }
             } else {
@@ -989,11 +942,13 @@
         function selectSuggestion(productName) {
             document.getElementById('search-input').value = productName;
             document.getElementById('suggestions-container').style.display = 'none';
-            let container = document.getElementById('products-container');
-            let cards = container.getElementsByClassName('product-card');
-            for (let i = 0; i < cards.length; i++) {
-                cards[i].style.display = (cards[i].getAttribute('data-name') === productName.toLowerCase()) ? "" : "none";
+            
+            let baseList = productsList;
+            if (currentActiveCategory !== 'all') {
+                baseList = productsList.filter(p => p.category.toLowerCase() === currentActiveCategory);
             }
+            let filtered = baseList.filter(p => p.name.toLowerCase() === productName.toLowerCase());
+            renderProducts(filtered);
         }
 
         document.addEventListener('click', function(e) {
@@ -1002,14 +957,6 @@
                 document.getElementById('suggestions-container').style.display = 'none';
             }
         });
-
-        function confirmRefresh() {
-            if (cart && cart.length > 0) {
-                if (confirm("⚠️ يوجد منتجات بالسلة. هل أنت متأكد من تحديث الصفحة؟")) location.reload();
-            } else {
-                location.reload();
-            }
-        }
 
         renderProducts(productsList);
 
@@ -1074,13 +1021,14 @@
 
         function toggleTheme() {
             let currentTheme = document.documentElement.getAttribute('data-theme');
-            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
         }
 
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('preferred-theme', theme);
-            document.getElementById('theme-btn').innerHTML = (theme === 'dark') ? '☀️ الوضع النهاري' : '🌙 الوضع الليلي';
+            document.getElementById('theme-btn').innerText = (theme === 'dark') ? '🌙' : '☀️';
         }
 
         (function initTheme() {
@@ -1103,12 +1051,12 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function onProductOptionChange(id) {
+        function onModalOptionChange(id) {
             let product = productsList.find(p => p.id === id);
             if (!product) return;
 
-            let selectedColor = document.getElementById('product-color-' + id).value.trim();
-            let selectedSize = document.getElementById('product-size-' + id).value.trim();
+            let selectedColor = document.getElementById('modal-product-color-' + id).value.trim();
+            let selectedSize = document.getElementById('modal-product-size-' + id).value.trim();
 
             let matchedVariant = product.variants.find(v => v.color === selectedColor && v.size === selectedSize) 
                               || product.variants.find(v => v.color === selectedColor) 
@@ -1116,13 +1064,16 @@
 
             if (matchedVariant) {
                 if (matchedVariant.img) {
-                    let imgElement = document.getElementById('product-img-' + id);
-                    if(imgElement) imgElement.src = matchedVariant.img;
+                    let imgElement = document.getElementById('modal-product-img-' + id);
+                    if(imgElement) {
+                        imgElement.src = matchedVariant.img;
+                        imgElement.setAttribute('onclick', `openSingleImageOverlay('${matchedVariant.img}', '${product.name}')`);
+                    }
                 }
-                document.getElementById('product-price-' + id).innerText = matchedVariant.price + ' شيكل';
-                document.getElementById(`stock-count-${id}`).innerText = matchedVariant.stock;
+                document.getElementById('modal-product-price-' + id).innerText = matchedVariant.price + ' شيكل';
+                document.getElementById(`modal-stock-count-${id}`).innerText = matchedVariant.stock;
 
-                let addBtn = document.getElementById(`btn-add-${id}`);
+                let addBtn = document.getElementById(`modal-btn-add-${id}`);
                 if (matchedVariant.stock === 0) {
                     addBtn.disabled = true;
                     addBtn.innerText = "❌ غير متوفر بهذا اللون والمقاس";
@@ -1204,13 +1155,13 @@
                 itemsPrice += itemTotal;
                 cartHTML += `
                     <div class="cart-item">
-                        <div style="text-align: right;">
+                        <div style="text-align: right; font-size: 13px;">
                             <b>${item.qty} × ${item.name}</b><br>
                             <small style="color: var(--text-muted);">السعر: ${item.price} شيكل</small>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <b style="color: var(--color-success);">${itemTotal} شيكل</b>
-                            <button class="btn btn-danger" onclick="removeFromCart(${index});">🗑️</button>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <b style="color: var(--color-success); font-size: 13px;">${itemTotal} شيكل</b>
+                            <button class="btn btn-danger" onclick="removeFromCart(${index});">🗑</button>
                         </div>
                     </div>
                 `;
@@ -1265,7 +1216,7 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = `جاري إرسال الطلب...`;
 
-            let itemsPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let itemsPrice = cart.reduce((groupSum, item) => groupSum + (item.price * item.qty), 0);
             let grandTotal = itemsPrice + shippingPrice;
 
             let message = `*طلب جديد من متجر نهوض* 👕\n\n`;
@@ -1280,7 +1231,7 @@
             updateCartUI();
 
             setTimeout(() => {
-                submitBtn.disabled = false;
+                submitBtn.disabled5 = false;
                 submitBtn.innerHTML = `📲 إرسال الطلب عبر الواتساب`;
                 window.location.href = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(message)}`;
             }, 1000);
